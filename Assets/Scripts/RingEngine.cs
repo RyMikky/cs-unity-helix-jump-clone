@@ -240,37 +240,9 @@ public class RingEngine : MonoBehaviour
         }
     }
 
-    private void ElementVanishing(Material material, float time)
-    {
-        float z_time = time - 1;
-
-        //material.SetFloat(material.shader.Property)
-        //Debug.Log(material.HasProperty(material.shader.GetPropertyName(1)));
-        //material.SetFloat(material.shader.GetPropertyName(1), 0);
-        Material n_mat = material;
-        n_mat.SetFloat(1, 0.1f);
-        //material.SetFloat(1, 0.1f);
-    }
-
     private void DelayedDestroy()
     {
         System.Random rnd = new System.Random();
-        //foreach (var child in _children)
-        //{
-        //    float time = rnd.Next(2, 7);
-
-        //    Destroy(child, time);
-
-        //    if (child.tag == "TowerSector")
-        //    {
-        //        Debug.Log("Надо растворить объект");
-        //        child.GetComponent<MeshRenderer>().material.SetFloat(1, 0.1f);
-        //        //ElementVanishing(child.GetComponent<MeshRenderer>().material, time);
-        //    }
-        //    //Debug.Log("Уничтожаю объект");
-        //}
-
-
         for (int i = 0; i < _children.Count - 1; ++i)
         {
             float time = rnd.Next(2, 7);
@@ -279,9 +251,7 @@ public class RingEngine : MonoBehaviour
 
             if (_children[i].tag == "TowerSector")
             {
-                Debug.Log("Надо растворить объект");
-                //_children[i].GetComponent<MeshRenderer>().material.SetFloat(1, 0);
-                _children[i].GetComponent<SectorEngine>().SetAlpha(0);
+                _children[i].GetComponent<SectorEngine>().SetVanishingTime(time - 1);
             }
         }
     }

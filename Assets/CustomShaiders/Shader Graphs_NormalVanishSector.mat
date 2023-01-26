@@ -11,7 +11,6 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 83ba4c0c7e0fa2e4b807e52355510fec, type: 3}
   m_ValidKeywords:
   - _ALPHATEST_ON
-  - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
@@ -46,8 +45,8 @@ Material:
     - _NoiseScaler: 50
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 0
-    - _SmoothStep: 0.5
+    - _ReceiveShadows: 1
+    - _SmoothStep: 1
     - _SrcBlend: 1
     - _Surface: 0
     - _WorkflowMode: 1

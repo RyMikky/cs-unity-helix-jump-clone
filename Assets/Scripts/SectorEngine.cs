@@ -33,6 +33,9 @@ public class SectorEngine : MonoBehaviour
 
     private bool IsEnable = true;                        // флаг работы метода триггеров
     private bool IsEmptyCalculate = false;               // флаг для того, чтобы очки плюсовались только один раз
+    private bool IsVanishing = false;                    // флаг "растворения" элемента
+    private float _vanishingTime = 0;                    // время за которое элемент должен раствориться
+    private float _startVanishTime = 0;                  // время начала "растворения"
 
     public Transform GetAxisPoint() { return _axisPoint; }
     public Transform GetEdgePoint() { return _edgePoint; }
@@ -41,11 +44,29 @@ public class SectorEngine : MonoBehaviour
     void Update()
     {
         TypeUpdater();
+
+        if (IsVanishing) 
+            SectorVanishing();
+    }
+
+    public void SetVanishingTime(float time) 
+    { 
+        if (time > 0)
+        {
+            _vanishingTime = time;           // записываем время за корторое элемент должен исчезнуть
+            _startVanishTime = Time.time;    // записываем время начала исчезания
+            IsVanishing = true;              // поднимаем флаг необходимости растворения
+        }
+    }
+
+    private void SectorVanishing()
+    {
+        float calc_time = Time.time - _startVanishTime;
+        GetComponent<MeshRenderer>().material.SetFloat("_SmoothStep", 1 - (calc_time / _vanishingTime));
     }
 
     public void SetAlpha(float alpha)
     {
-        Debug.Log(_vanishedShader.GetPropertyName(1));
         GetComponent<MeshRenderer>().material.SetFloat(_vanishedShader.GetPropertyName(1), alpha);
     }
 
@@ -74,10 +95,10 @@ public class SectorEngine : MonoBehaviour
                 break;
             case _sectorType.normal:
                 // назначаем соответствующий цвет
-                Material vanished_sector = new Material(_vanishedShader);
-                sectorMeshRenderer.material = vanished_sector;
+                //Material vanished_sector = new Material(_vanishedShader);
+                //sectorMeshRenderer.material = vanished_sector;
 
-                //sectorMeshRenderer.material = _sectorMaterials[4];
+                sectorMeshRenderer.material = _sectorMaterials[4];
                 sectorMeshRenderer.enabled = true;
                 break;
 
