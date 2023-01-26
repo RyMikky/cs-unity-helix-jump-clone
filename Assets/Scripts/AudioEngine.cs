@@ -25,6 +25,16 @@ public class AudioEngine : MonoBehaviour
         _platformBreak.Play();
     }
 
+    public void IncrementPlatformBreakPitch()
+    {
+        if (_platformBreak.pitch < 3) _platformBreak.pitch += 0.1f;
+    }
+
+    public void SetPlatformBreakPitchDefault()
+    {
+        _platformBreak.pitch = 1;
+    }
+
     public void SetBackgroundVolume(float volume)
     {
         _backgroundSource.volume = volume;

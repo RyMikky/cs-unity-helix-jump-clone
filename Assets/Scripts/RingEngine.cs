@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -239,13 +240,49 @@ public class RingEngine : MonoBehaviour
         }
     }
 
+    private void ElementVanishing(Material material, float time)
+    {
+        float z_time = time - 1;
+
+        //material.SetFloat(material.shader.Property)
+        //Debug.Log(material.HasProperty(material.shader.GetPropertyName(1)));
+        //material.SetFloat(material.shader.GetPropertyName(1), 0);
+        Material n_mat = material;
+        n_mat.SetFloat(1, 0.1f);
+        //material.SetFloat(1, 0.1f);
+    }
+
     private void DelayedDestroy()
     {
         System.Random rnd = new System.Random();
-        foreach(var child in _children)
+        //foreach (var child in _children)
+        //{
+        //    float time = rnd.Next(2, 7);
+
+        //    Destroy(child, time);
+
+        //    if (child.tag == "TowerSector")
+        //    {
+        //        Debug.Log("Надо растворить объект");
+        //        child.GetComponent<MeshRenderer>().material.SetFloat(1, 0.1f);
+        //        //ElementVanishing(child.GetComponent<MeshRenderer>().material, time);
+        //    }
+        //    //Debug.Log("Уничтожаю объект");
+        //}
+
+
+        for (int i = 0; i < _children.Count - 1; ++i)
         {
-            Destroy(child, rnd.Next(2, 7));
-            //Debug.Log("Уничтожаю объект");
+            float time = rnd.Next(2, 7);
+
+            Destroy(_children[i], time);
+
+            if (_children[i].tag == "TowerSector")
+            {
+                Debug.Log("Надо растворить объект");
+                //_children[i].GetComponent<MeshRenderer>().material.SetFloat(1, 0);
+                _children[i].GetComponent<SectorEngine>().SetAlpha(0);
+            }
         }
     }
 

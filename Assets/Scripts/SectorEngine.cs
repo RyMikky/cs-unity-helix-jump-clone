@@ -22,6 +22,8 @@ public class SectorEngine : MonoBehaviour
 
     public _sectorType _type;                            // тип механики сектора
 
+    public Shader _vanishedShader;
+
     public List<Material> _sectorMaterials = new List<Material>();
 
     private _sectorType _currentType;                    // закрытое поле текущего типа сектора
@@ -39,6 +41,12 @@ public class SectorEngine : MonoBehaviour
     void Update()
     {
         TypeUpdater();
+    }
+
+    public void SetAlpha(float alpha)
+    {
+        Debug.Log(_vanishedShader.GetPropertyName(1));
+        GetComponent<MeshRenderer>().material.SetFloat(_vanishedShader.GetPropertyName(1), alpha);
     }
 
     public void SectorCtor()
@@ -66,7 +74,10 @@ public class SectorEngine : MonoBehaviour
                 break;
             case _sectorType.normal:
                 // назначаем соответствующий цвет
-                sectorMeshRenderer.material = _sectorMaterials[1];
+                Material vanished_sector = new Material(_vanishedShader);
+                sectorMeshRenderer.material = vanished_sector;
+
+                //sectorMeshRenderer.material = _sectorMaterials[4];
                 sectorMeshRenderer.enabled = true;
                 break;
 
@@ -113,6 +124,8 @@ public class SectorEngine : MonoBehaviour
                             new Vector3(0, -other.GetComponent<BallEngine>()._currentYSpeed * 1.4f, 0), ForceMode.VelocityChange);
                         // проигрываем звук отскока шарика
                         _audioSystem.GetComponent<AudioEngine>().PlayBallBounce();
+                        // сбрасываем повышение тона у звука пролета шарика
+                        _audioSystem.GetComponent<AudioEngine>().SetPlatformBreakPitchDefault();
                     }
                     break;
 
@@ -128,6 +141,8 @@ public class SectorEngine : MonoBehaviour
 
                     // проигрываем звук отскока шарика
                     _audioSystem.GetComponent<AudioEngine>().PlayBallBounce();
+                    // сбрасываем повышение тона у звука пролета шарика
+                    _audioSystem.GetComponent<AudioEngine>().SetPlatformBreakPitchDefault();
                     break;
 
                 case _sectorType.score:
@@ -142,8 +157,10 @@ public class SectorEngine : MonoBehaviour
                     }
                     // включаем набор комбо и ускоряем падение игрового шарика
                     gameBall.GetComponent<BallEngine>().SetCombo(true).IncrementBallSpeed();
-
+                    // повышаем pitch звук пролета шарика
+                    _audioSystem.GetComponent<AudioEngine>().IncrementPlatformBreakPitch();
                     break;
+
                 case _sectorType.finish:
                     // останавливаем ускорение шарика
                     gameBall.GetComponent<BallEngine>().SetEnable(false);
@@ -156,6 +173,8 @@ public class SectorEngine : MonoBehaviour
 
                     // проигрываем звук отскока шарика
                     _audioSystem.GetComponent<AudioEngine>().PlayBallBounce();
+                    // сбрасываем повышение тона у звука пролета шарика
+                    _audioSystem.GetComponent<AudioEngine>().SetPlatformBreakPitchDefault();
                     break;
             }
         }

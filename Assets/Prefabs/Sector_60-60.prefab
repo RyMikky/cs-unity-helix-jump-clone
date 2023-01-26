@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: c96eaf9f665ded647a356b829838025d, type: 3}
+  - {fileID: 2100000, guid: 9b61f7a4b5288a74db3174670375597c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,9 +111,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edc74cf77d3019b48ad4252c52641147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _axisPoint: {fileID: 0}
+  _edgePoint: {fileID: 0}
   _type: 0
+  _vanishedShader: {fileID: -6465566751694194690, guid: 83ba4c0c7e0fa2e4b807e52355510fec, type: 3}
   _sectorMaterials:
-  - {fileID: 2100000, guid: 2b9c239d9b153da47a77eb60f2db25ff, type: 2}
-  - {fileID: 2100000, guid: eceb1aee2aba44546a8457eb92a8edb2, type: 2}
-  - {fileID: 2100000, guid: 19e64b153e7bb2a418f837f1bb04c42b, type: 2}
-  - {fileID: 2100000, guid: 594b254332ff015428a302702e99c88c, type: 2}
+  - {fileID: 2100000, guid: 9b61f7a4b5288a74db3174670375597c, type: 2}
+  - {fileID: 2100000, guid: f27c58c0dfe97ea4d88063e148796dec, type: 2}
+  - {fileID: 2100000, guid: 001590d056a3b0a4aa15f428be83e25c, type: 2}
+  - {fileID: 2100000, guid: 4852e870a26f0f94783b7af73e8fe24d, type: 2}
+  - {fileID: 2100000, guid: c0764131ab7528b4991f1881e55b76ec, type: 2}
