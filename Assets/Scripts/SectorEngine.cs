@@ -98,7 +98,7 @@ public class SectorEngine : MonoBehaviour
                 //Material vanished_sector = new Material(_vanishedShader);
                 //sectorMeshRenderer.material = vanished_sector;
 
-                sectorMeshRenderer.material = _sectorMaterials[4];
+                sectorMeshRenderer.material = _sectorMaterials[1];
                 sectorMeshRenderer.enabled = true;
                 break;
 
