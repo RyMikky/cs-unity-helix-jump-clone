@@ -26,6 +26,11 @@ public class SectorEngine : MonoBehaviour
 
     public List<Material> _sectorMaterials = new List<Material>();
 
+    public ParticleSystem _ballParticleSystem;           // система частиц для отработки столкновения с шариком
+    public ParticleSystem _alertParticleSystem;          // система частиц для отработки при попадании на красный сектор
+    public ParticleSystem _winParticleSystem;            // система частиц для отработки при попадании на сектор финиша
+    public ParticleSystem _crashParticleSystem;          // система частиц для отработки разлета блоков
+
     private _sectorType _currentType;                    // закрытое поле текущего типа сектора
     private GameObject _scoreFields;                     // поле объектов где будут подсчитываться очки
     private GameObject _menuUISystem;                    // поле обработки выходов в меню
@@ -40,6 +45,16 @@ public class SectorEngine : MonoBehaviour
     public Transform GetAxisPoint() { return _axisPoint; }
     public Transform GetEdgePoint() { return _edgePoint; }
     public void SetEnable(bool enable) { IsEnable = enable; }
+
+    private void Awake()
+    {
+        // если изначально не заданы системы, то ищем их в проекте
+        if (_menuUISystem == null)
+            _menuUISystem = GameObject.FindGameObjectWithTag("MenuUISystem");
+
+        if (_audioSystem == null)
+            _audioSystem = GameObject.FindGameObjectWithTag("AudioSystem");
+    }
 
     void Update()
     {
@@ -77,11 +92,11 @@ public class SectorEngine : MonoBehaviour
         // берем рендер объекта
         MeshRenderer sectorMeshRenderer = GetComponent<MeshRenderer>();
 
-        if (_menuUISystem == null)
-            _menuUISystem = GameObject.FindGameObjectWithTag("MenuUISystem");
+        //if (_menuUISystem == null)
+        //    _menuUISystem = GameObject.FindGameObjectWithTag("MenuUISystem");
 
-        if (_audioSystem == null)
-            _audioSystem = GameObject.FindGameObjectWithTag("AudioSystem");
+        //if (_audioSystem == null)
+        //    _audioSystem = GameObject.FindGameObjectWithTag("AudioSystem");
 
         switch (_currentType)
         {
@@ -138,6 +153,11 @@ public class SectorEngine : MonoBehaviour
                         // снимаем комбо-режим если он есть и устанавливаем дефолтное значение скорости
                         gameBall.GetComponent<BallEngine>().SetCombo(false).SetSpeedToDefault();
 
+                        // переносим систему частиц на новую позицию
+                        _ballParticleSystem.transform.position = other.transform.position;
+                        // запускаем проигрывание частиц столкновения с шариком
+                        _ballParticleSystem.Play();
+
                         // останавливаем падение шара
                         ballBody.velocity = Vector3.zero;
                         // придаем вертикальной скорости обратной максимальной скорости GameBall со скалированием
@@ -151,10 +171,14 @@ public class SectorEngine : MonoBehaviour
                     break;
 
                 case _sectorType.alert:
+
+                    _alertParticleSystem.Play();
+
                     // останавливаем ускорение шарика
                     gameBall.GetComponent<BallEngine>().SetEnable(false);
                     // останавливаем падение шара
                     ballBody.velocity = Vector3.zero;
+
                     // запрещаем поворот башни
                     GetComponentInParent<TowerEngine>().SetTowerRotation(false);
                     // включаем скрин с вредной аквой
@@ -176,6 +200,9 @@ public class SectorEngine : MonoBehaviour
 
                         IsEmptyCalculate = true;
                     }
+
+                    _crashParticleSystem.Play();
+
                     // включаем набор комбо и ускоряем падение игрового шарика
                     gameBall.GetComponent<BallEngine>().SetCombo(true).IncrementBallSpeed();
                     // повышаем pitch звук пролета шарика
@@ -183,6 +210,9 @@ public class SectorEngine : MonoBehaviour
                     break;
 
                 case _sectorType.finish:
+
+                    _winParticleSystem.Play();
+
                     // останавливаем ускорение шарика
                     gameBall.GetComponent<BallEngine>().SetEnable(false);
                     // останавливаем падение шара
@@ -192,6 +222,8 @@ public class SectorEngine : MonoBehaviour
                     // включаем скрин с вредной аквой
                     _menuUISystem.GetComponent<MenuUIEngine>().ActivateAquaWinScreen();
 
+                    _winParticleSystem.Play();
+
                     // проигрываем звук отскока шарика
                     _audioSystem.GetComponent<AudioEngine>().PlayBallBounce();
                     // сбрасываем повышение тона у звука пролета шарика
@@ -199,6 +231,25 @@ public class SectorEngine : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void ParticleApplication(ref Collider other)
+    {
+        // сохраняем базовую позицию
+        Vector3 def_pos = _ballParticleSystem.transform.position;
+        // берем позицию коллайдера вошедшего в триггер
+        Vector3 new_pos = other.transform.position;
+        // возвращаем высоту на базовую
+        //new_pos.y = def_pos.y;
+
+        // переносим систему частиц на новую позицию
+        _ballParticleSystem.transform.position = new_pos;
+
+        // запускаем проигрывание частиц столкновения с шариком
+        _ballParticleSystem.Play();
+
+        // возвращаем изначальную позицию системе частиц
+        _ballParticleSystem.transform.position = def_pos;
     }
 
     public void SetSectorMode(_sectorType type)

@@ -47,11 +47,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BlinkSpeed: 4
+    - _FresnelPower: 2
+    - _NoiseScaler: 20
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _SmoothStep: 1
     - _Speed: 4
     m_Colors:
+    - _BasicColor: {r: 1, g: 0.16509426, b: 0.16509426, a: 1}
+    - _BlinkColor: {r: 1, g: 0.7180627, b: 0, a: 1}
     - _Color: {r: 0.6792453, g: 0.15699539, b: 0.15699539, a: 1}
     - _Color_1: {r: 1, g: 0, b: 0, a: 1}
     - _Color_2: {r: 0.6698113, g: 0, b: 0, a: 1}
+    - _FresnelColor: {r: 1, g: 0.04092755, b: 0.0235849, a: 0}
   m_BuildTextureStacks: []
